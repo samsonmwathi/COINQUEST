@@ -1,3 +1,2 @@
 ﻿  Source.cpp
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Coinquest.vcxproj -> C:\Users\Samson\Desktop\Coin\Coinquest\Debug\Coinquest.exe
+  Coinquest.vcxproj -> C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Debug\Coinquest.exe
