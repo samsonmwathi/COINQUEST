@@ -2,170 +2,159 @@
 #include<string.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
-//Window Dimensions 
-const GLint  WIDTH = 800, HEIGHT= 600;
-GLuint VAO, VBO, shader;
+//compiles the shaders
+static unsigned int CompileShader(unsigned int type, const std::string& source)
+{
+    unsigned int id = glCreateShader(type);
+    const char* src = source.c_str();
+    glShaderSource(id, 1, &src, nullptr);
+    glCompileShader(id);
 
-//Vertex Shader
+    int result;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+    if (result == GL_FALSE)
+    {
+        int length;
+        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+        char* message = (char*) alloca (length * sizeof(char));
+        glGetShaderInfoLog(id, length, &length, message);
+        std::cout << "Failed to Compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader!" <<std::endl;
+            std::cout << message << std::endl;
+        glDeleteShader(id);
+        return 0;
+    }
+    return id;
+}
+//creates a shader
+static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+{
+    unsigned int program = glCreateProgram();
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
-static const char* vShader = "                                        \n\
-#version 330                                                          \n\
-                                                                      \n\
-layout(location = 0) in vec3 pos;                                     \n\
-                                                                      \n\
-void main()                                                           \n\
-{                                                                     \n\
-	gl_postion = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);          \n\
-}";
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glValidateProgram(program);
 
-//FragmentShader
+    glDeleteShader(vs);
+    glDeleteShader(fs);
 
-static const char* fShader = "                                       \n\
-#version 330                                                         \n\
-                                                                     \n\
-out vec4 colour;                                                     \n\
-                                                                     \n\
-void main()                                                          \n\
-{                                                                    \n\
-	colour = vec4(1.0, 0.0, 0.0, 1.0);                               \n\
-}";
+    return program;
+}
+//function fo drawing a green square at the bottom of the screen
+void drawGround(float left, float right, float top, float bottom)
+{
+       
+    float positions[8] = {
+        left,  bottom,
+        right, bottom,
+        right, top,
+        left,  top
+    };
 
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), positions, GL_STATIC_DRAW);
 
-void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType) {
-	GLuint theShader = glCreateShader(shaderType);
-	const GLchar* theCode[1];
-	theCode[0] = shaderCode;
-	
-	GLint codeLength[1];
-	codeLength[0] = strlen(shaderCode);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-	glShaderSource(theShader, 1, theCode,codeLength);
-	glCompileShader(theShader);
+    std::string vertexShader =
+        "#version 330 core\n"
+        "\n"
+        "layout(location=0) in vec4 Position;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "   glposition = position;\n"
+        "}\n";
+    
+    std::string fragmentShader =
+        "#version 330 core\n"
+        "\n"
+        "layout(location=0) out vec4 colour;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "   colour = vec4(0.3, 0.54, 0.5, 1.0);\n"
+        "}\n";
 
-	GLint result = 0;
-	GLchar eLog[1024] = { 0 };
-
-	glGetShaderiv(theShader, GL_COMPILE_STATUS, &result);
-	if (!result) {
-
-		glGetProgramInfoLog(theShader, sizeof(eLog), NULL, eLog);
-		printf("error compiling the %d shader, %s\n",shaderType, eLog);
-		return;
-	}
-	glAttachShader(theProgram, theShader);
-
-	return;
+    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    glUseProgram(shader);
 }
 
-void compileShaders() {
-	shader = glCreateProgram();
-	if (!shader) {
-		printf("Error Creating shader program!\n");
-		return;
-	}
 
-	addShader(shader, vShader, GL_VERTEX_SHADER);
-	addShader(shader, fShader, GL_FRAGMENT_SHADER);
+int main (void)
+{
+    GLFWwindow* window;
 
-	GLint result = 0;
-	GLchar eLog[1024] = { 0 };
+    /*initialize Library*/
+    if (!glfwInit())
+        return -1;
 
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-	if (!result) {
-		glGetProgramInfoLog(shader, sizeof(eLog),NULL, eLog);
-		printf("error linking program,'%s'\n", eLog);
-		return;
-	}
+    /*Create a winodwed mode window and its OpenGl context*/
 
-	glValidateProgram(shader);
-	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-	if (!result) {
-		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
-		printf("error validating program,'%s'\n", eLog);
-		return;
-	}
-}
+    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return - 1;
+    }
 
-void makeSquare() {
-	GLfloat vertices[]{
-		0.0f,1.0f,0.0f,
-		//1.0f,1.0f,0.0f,
-		-1.0f,-1.0f,0.0f,
-		1.0f,-1.0f,0.0f
-	};
-	glGenVertexArrays(1,&VAO);
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-}
+    /* Make the Window's context current*/
+    glfwMakeContextCurrent(window);
 
-int main() {
-	//initialize GLFW
-	if (!glfwInit())
-	{
-		printf("GLFW initialization failed!");
-		glfwTerminate();
-		return 1;
-	}
-	//set GLFW window properties
-	//opgl version
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	//COREPROFILE == NO BACKWARDS COMPATIBILITY
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//Allow forward compatibility
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    if (glewInit() != GLEW_OK)
+        std::cout << "Error!" << std::endl;
+    //get openGl version
+    //std::cout << glGetString(GL_VERSION) << std::endl;
+    
+  
+    //calculations for drawing to the screen
+    int screenwidth = 640;
+    int screenheight = 480;
 
-	GLFWwindow* mainwindow = glfwCreateWindow(WIDTH, HEIGHT, "COINQUEST", NULL, NULL);
-	if(!mainwindow) {
-		printf("Main Window creation Failed");
-		glfwTerminate();
-		return 1;
-	}
+    //the size of a ground box used to calculate the coordiantes of the square
+    int boxwidth = 50;
+    int boxheight = 50;
+    int boxleft = -1.07813 * screenwidth;
+    int boxbottom = -1 * screenheight;
 
-	//Get buffer size information(view port size)
-	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(mainwindow, &bufferWidth, &bufferHeight);
-
-	//set context for GLEW to use
-	glfwMakeContextCurrent(mainwindow);
-
-	//Allow Modern Extension Values
-	glewExperimental = GL_TRUE;
-
-	if (glewInit()!=GLEW_OK) {
-		printf("GLEW initializatin failed!");
-		glfwDestroyWindow(mainwindow);
-		glfwTerminate();
-		return 1;
-	}
-	//setup viewport size
-	glViewport(0, 0, bufferWidth, bufferHeight);
-	makeSquare();
-	compileShaders();
-
-	//loop until window closes
-	while (!glfwWindowShouldClose(mainwindow)) {
-		//Get and handle user inputs
-		glfwPollEvents();
+    // calculate screen space coordinates
+    //we use coords to create the square
+    float left = (float)boxleft / screenwidth;
+    float right = left + (float)boxwidth / screenwidth;
+    float bottom = (float)boxbottom / screenheight;
+    float top = bottom + (float)boxheight / screenheight;
+    
+    //loop the squares to make the ground
+    while (left < screenwidth) {
+       
+        drawGround(left, right, top, bottom);
+        left++;
+        
+    }
 
 
-		//clear the window
-		glClearColor(0.0f, 0.5f, 1.5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shader);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-		glUseProgram(0);
-		glfwSwapBuffers(mainwindow);
-	}
+    /*Loop until the user closes the window*/
+    while (!glfwWindowShouldClose(window))
+    {
+        /*Render here*/
+        glClearColor(0.5294f, 0.8078f, 0.9216f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-	return 0;
+        glDrawArrays(GL_POLYGON, 0, 4);
+
+        /*swap front and back buffers*/
+        glfwSwapBuffers(window);
+
+        /*Poll for and process events*/
+        glfwPollEvents();
+    }
+
+   // glDeleteProgram(shader);
 }
