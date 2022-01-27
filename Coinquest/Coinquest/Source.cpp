@@ -3,6 +3,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <glut.h>
+#include <string>
+#include <cstring>
+#include "SFML-2.5.1\include\SFML\Graphics.hpp"
+
 
 //compiles the shaders
 static unsigned int CompileShader(unsigned int type, const std::string& source)
@@ -87,6 +92,10 @@ void drawGround(float left, float right, float top, float bottom)
     glUseProgram(shader);
 }
 
+//function for character movement with arrow keys
+
+//The coin;
+
 
 int main (void)
 {
@@ -98,7 +107,7 @@ int main (void)
 
     /*Create a winodwed mode window and its OpenGl context*/
 
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Coinquest", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -148,13 +157,15 @@ int main (void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         glDrawArrays(GL_POLYGON, 0, 4);
-
+        
         /*swap front and back buffers*/
         glfwSwapBuffers(window);
 
         /*Poll for and process events*/
         glfwPollEvents();
     }
+
+    
 
    // glDeleteProgram(shader);
 }
