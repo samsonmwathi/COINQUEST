@@ -3,12 +3,17 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <glut.h>
 #include <string>
 #include <cstring>
-#include "SFML-2.5.1\include\SFML\Graphics.hpp"
+#include "SFML-2.5.1/include/SFML/Graphics.hpp"
+#include "SFML-2.5.1/include/SFML/Config.hpp"
+#include "SFML-2.5.1/include/SFML/GpuPreference.hpp"
+#include "SFML-2.5.1/include/SFML/OpenGL.hpp"
+#include "SFML-2.5.1/include/SFML/Window.hpp"
+#include "SFML-2.5.1/include/SFML/System.hpp"
+#include "SFML-2.5.1/include/SFML/Main.hpp"
 
-
+/*
 //compiles the shaders
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -101,11 +106,11 @@ int main (void)
 {
     GLFWwindow* window;
 
-    /*initialize Library*/
+    //initialize Library
     if (!glfwInit())
         return -1;
 
-    /*Create a winodwed mode window and its OpenGl context*/
+    //Create a winodwed mode window and its OpenGl context
 
     window = glfwCreateWindow(640, 480, "Coinquest", NULL, NULL);
     if (!window)
@@ -114,7 +119,7 @@ int main (void)
         return - 1;
     }
 
-    /* Make the Window's context current*/
+    //Make the Window's context current
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK)
@@ -149,23 +154,49 @@ int main (void)
     }
 
 
-    /*Loop until the user closes the window*/
+    //Loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        /*Render here*/
+        //Render here
         glClearColor(0.5294f, 0.8078f, 0.9216f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glDrawArrays(GL_POLYGON, 0, 4);
         
-        /*swap front and back buffers*/
+        //swap front and back buffers
         glfwSwapBuffers(window);
 
-        /*Poll for and process events*/
+        //Poll for and process events
         glfwPollEvents();
     }
 
     
 
    // glDeleteProgram(shader);
+}
+*/
+//Specify window dimensions
+sf::Vector2f viewSize(1024, 768);
+sf::VideoMode vm(viewSize.x, viewSize.y);
+
+//create window
+sf::RenderWindow window(vm, "Coinquest", sf::Style::Default);
+
+
+
+//sf::Texture skyTexture;
+//sf::Sprite skySprite;
+
+void init() {
+    
+}
+int main() {
+    while (window.isOpen()) {
+        // Handle Keyboard Events
+        // Update Game Objects in the scene
+        window.clear(sf::Color::Black);
+        // Render Game Objects
+        window.display();
+    }
+    return 0;
 }
