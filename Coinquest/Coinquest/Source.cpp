@@ -188,7 +188,7 @@ sf::Texture groundTexture;
 sf::Sprite groundSprite;
 
 
-
+//display the sprites on the window
 void draw() {
     window.draw(groundSprite);
     window.draw(coinSprite);
@@ -210,7 +210,7 @@ void init() {
 }
 int main() {
     while (window.isOpen()) {
-        // Handle Keyboard Events
+        
         // Update Game Objects in the scene
         window.clear(sf::Color::Blue);
         init();
