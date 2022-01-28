@@ -1,1 +1,36 @@
 A game for our Computer Graphics class
+
+Coinquest is an exciting and adventurous game in 2D where the
+player’s character collects as many coins as possible while avoiding
+dangerous and deadly obstacles and traps on the screen.
+
+The character maneuvers from left to right and can jump over
+obstacles. If the player hits an obstacle the game is over and the
+number of coins they have collected is saved. The game is set on an
+image background depicting an outdoor setting with a sky and grassy
+feel.
+
+The game will fully be developed on the C++ programing language and
+its source code will be available to anybody willing to further its
+features.
+
+Features
+
+1. 8-Bit styling has been chosen for this game as a nod
+to games of old that brings back feelings of nostalgia
+to the player.
+
+2. The game will be for all ages with its simple
+directional controls for moving forward, backward and 02
+jumping.
+
+3. The game is made to be simple yet posing the optimal
+challenge to players as they try to reach as far as 03
+possible in the quest.
+
+4. The simple structure and design of the game allows
+for future expansion and cross platform play
+
+5. The game will feature skins that a player can choose
+from that adds more interaction and provides for 05
+better player immersion.
