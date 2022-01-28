@@ -183,18 +183,43 @@ sf::VideoMode vm(viewSize.x, viewSize.y);
 sf::RenderWindow window(vm, "Coinquest", sf::Style::Default);
 
 
+//Adding sprites(images with transparent background)
+sf::Texture coinTexture;
+sf::Sprite coinSprite;
 
-//sf::Texture skyTexture;
-//sf::Sprite skySprite;
+sf::Texture cactusTexture;
+sf::Sprite cactusSprite;
 
+sf::Texture groundTexture;
+sf::Sprite groundSprite;
+
+
+
+void draw() {
+    window.draw(groundSprite);
+    window.draw(coinSprite);
+    window.draw(cactusSprite);
+}
 void init() {
-    
+    //Load the textures
+    coinTexture.loadFromFile("Game_Assets/coin.png");
+    cactusTexture.loadFromFile("Game_Assets/cactus.png");
+    groundTexture.loadFromFile("Game_Assets/ground.png");
+    //Set and attach textures to sprites
+    coinSprite.setTexture(coinTexture);
+    cactusSprite.setTexture(cactusTexture);
+    groundSprite.setTexture(groundTexture);
+
+    //set positions of sprites
+    groundSprite.setPosition(sf::Vector2f(viewSize.x / 3,viewSize.y / 3));
+    groundSprite.setOrigin(groundTexture.getSize().x / 2, groundTexture.getSize().y / 2);
 }
 int main() {
     while (window.isOpen()) {
         // Handle Keyboard Events
         // Update Game Objects in the scene
         window.clear(sf::Color::Black);
+        draw();
         // Render Game Objects
         window.display();
     }
