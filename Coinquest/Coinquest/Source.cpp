@@ -5,13 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "SFML-2.5.1/include/SFML/Graphics.hpp"
-#include "SFML-2.5.1/include/SFML/Config.hpp"
-#include "SFML-2.5.1/include/SFML/GpuPreference.hpp"
-#include "SFML-2.5.1/include/SFML/OpenGL.hpp"
-#include "SFML-2.5.1/include/SFML/Window.hpp"
-#include "SFML-2.5.1/include/SFML/System.hpp"
-#include "SFML-2.5.1/include/SFML/Main.hpp"
+#include <SFML/Graphics.hpp>
 
 /*
 //compiles the shaders
@@ -202,9 +196,9 @@ void draw() {
 }
 void init() {
     //Load the textures
-    coinTexture.loadFromFile("Game_Assets/coin.png");
-    cactusTexture.loadFromFile("Game_Assets/cactus.png");
-    groundTexture.loadFromFile("Game_Assets/ground.png");
+    coinTexture.loadFromFile("../Game_Assets/coin.png");
+    cactusTexture.loadFromFile("../Game_Assets/cactus.png");
+    groundTexture.loadFromFile("../Game_Assets/ground.png");
     //Set and attach textures to sprites
     coinSprite.setTexture(coinTexture);
     cactusSprite.setTexture(cactusTexture);
@@ -218,7 +212,8 @@ int main() {
     while (window.isOpen()) {
         // Handle Keyboard Events
         // Update Game Objects in the scene
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::Blue);
+        init();
         draw();
         // Render Game Objects
         window.display();

@@ -1,0 +1,27 @@
+﻿  Source.cpp
+C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Coinquest\Source.cpp(174,38): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Coinquest\Source.cpp(174,26): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Coinquest\Source.cpp(209,85): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Coinquest\Source.cpp(209,54): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+  Generating code
+  0 of 35 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Coinquest.vcxproj -> C:\Users\Samson\Computer Graphics Projects\COINQUEST\Coinquest\Release\Coinquest.exe
