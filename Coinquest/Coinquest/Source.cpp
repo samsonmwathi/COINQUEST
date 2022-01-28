@@ -3,10 +3,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <glut.h>
 #include <string>
 #include <cstring>
-#include "SFML-2.5.1\include\SFML\Graphics.hpp"
+#include <SFML/Graphics.hpp>
+#include "Menu.h"
 
 
 //compiles the shaders
@@ -99,15 +99,93 @@ void drawGround(float left, float right, float top, float bottom)
 
 int main (void)
 {
-    GLFWwindow* window;
+    RenderWindow Play;
+    RenderWindow OPTIONS;
+    RenderWindow EXIT;
+    //Make Start Menu window and close it before game starts
+    RenderWindow MENU(VideoMode(960, 720), "Start Menu", Style::Default);
+    StartMenu StartMenu(MENU.getSize().x, MENU.getSize().y);
+
+    while (MENU.isOpen()) {
+        Event event;
+        while (MENU.pollEvent(event)) {
+            if (event.type == Event::Closed) {
+                MENU.close();
+
+            }
+            if (event.type == Event::KeyReleased) {
+                if (event.key.code == Keyboard::Up) {
+                    StartMenu.MoveUp();
+                    break;
+                }
+                if (event.key.code == Keyboard::Down) {
+                    StartMenu.MoveDown();
+                    break;
+                }
+                if (event.key.code == Keyboard::Return) {
+                    RenderWindow Play(VideoMode(960, 720), "CoinQuest");
+                    RenderWindow OPTIONS(VideoMode(960, 720), "Options");
+                    RenderWindow EXIT(VideoMode(960, 720), "EXIT");
+                }
+                int x = StartMenu.MenuPressed();
+                if (x == 0) {
+                    while (Play.isOpen()) {
+                        Event aevent;
+                        while (Play.pollEvent(aevent)) {
+                            if (aevent.type == Event::Closed) {
+                                Play.close();
+                            }
+                            if (aevent.type == Event::KeyPressed) {
+
+                                if (aevent.key.code == Keyboard::Escape) {
+                                    Play.close();
+                                }
+                            }
+                        }
+                        OPTIONS.close();
+                        Play.clear();
+                        Play.display();
+                    }
+                }
+                if (x == 1) {
+                    while (OPTIONS.isOpen()) {
+                        Event aevent;
+                        while (OPTIONS.pollEvent(aevent)) {
+                            if (aevent.type == Event::Closed) {
+                                OPTIONS.close();
+                            }
+                            if (aevent.type == Event::KeyPressed) {
+
+                                if (aevent.key.code == Keyboard::Escape) {
+                                    OPTIONS.close();
+                                }
+                            }
+                        }
+                        Play.close();
+                        OPTIONS.clear();
+                        OPTIONS.display();
+                    }
+                }
+
+                if (x == 2) {
+                    MENU.close();
+                    break;
+                }
+            }
+        }
+    }
+    MENU.clear();
+    StartMenu.draw(MENU);
+    MENU.display();
+   /* GLFWwindow* window;
 
     /*initialize Library*/
-    if (!glfwInit())
-        return -1;
+    //if (!glfwInit())
+       // return -1;
 
     /*Create a winodwed mode window and its OpenGl context*/
 
-    window = glfwCreateWindow(640, 480, "Coinquest", NULL, NULL);
+    /*window = glfwCreateWindow(640, 480, "Coinquest", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -115,57 +193,57 @@ int main (void)
     }
 
     /* Make the Window's context current*/
-    glfwMakeContextCurrent(window);
+    //glfwMakeContextCurrent(window);
 
-    if (glewInit() != GLEW_OK)
-        std::cout << "Error!" << std::endl;
+    //if (glewInit() != GLEW_OK)
+        //std::cout << "Error!" << std::endl;
     //get openGl version
     //std::cout << glGetString(GL_VERSION) << std::endl;
     
   
     //calculations for drawing to the screen
-    int screenwidth = 640;
-    int screenheight = 480;
+    //int screenwidth = 640;
+    //int screenheight = 480;
 
     //the size of a ground box used to calculate the coordiantes of the square
-    int boxwidth = 50;
-    int boxheight = 50;
-    int boxleft = -1.07813 * screenwidth;
-    int boxbottom = -1 * screenheight;
+   // int boxwidth = 50;
+    //int boxheight = 50;
+    //int boxleft = -1.07813 * screenwidth;
+    //int boxbottom = -1 * screenheight;
 
     // calculate screen space coordinates
     //we use coords to create the square
-    float left = (float)boxleft / screenwidth;
-    float right = left + (float)boxwidth / screenwidth;
-    float bottom = (float)boxbottom / screenheight;
-    float top = bottom + (float)boxheight / screenheight;
+    //float left = (float)boxleft / screenwidth;
+    //float right = left + (float)boxwidth / screenwidth;
+    //float bottom = (float)boxbottom / screenheight;
+    //float top = bottom + (float)boxheight / screenheight;
     
     //loop the squares to make the ground
-    while (left < screenwidth) {
+    //while (left < screenwidth) {
        
-        drawGround(left, right, top, bottom);
-        left++;
+       // drawGround(left, right, top, bottom);
+        //left++;
         
-    }
+    //}
 
 
     /*Loop until the user closes the window*/
-    while (!glfwWindowShouldClose(window))
-    {
+    //while (!glfwWindowShouldClose(window))
+    //{
         /*Render here*/
-        glClearColor(0.5294f, 0.8078f, 0.9216f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+       // glClearColor(0.5294f, 0.8078f, 0.9216f, 1.0f);
+       // glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_POLYGON, 0, 4);
+        //glDrawArrays(GL_POLYGON, 0, 4);
         
         /*swap front and back buffers*/
-        glfwSwapBuffers(window);
+        //glfwSwapBuffers(window);
 
         /*Poll for and process events*/
-        glfwPollEvents();
-    }
+        //glfwPollEvents();
+    //}
 
     
 
-   // glDeleteProgram(shader);
+   // glDeleteProgram(shader);*/
 }
