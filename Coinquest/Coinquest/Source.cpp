@@ -92,6 +92,8 @@ void drawGround(float left, float right, float top, float bottom)
     glUseProgram(shader);
 }
 
+//Background
+    
 //function for character movement with arrow keys
 
 //The coin;
@@ -99,14 +101,21 @@ void drawGround(float left, float right, float top, float bottom)
 
 int main (void)
 {
+    sf::Texture texture;
+    if (!texture.loadFromFile("Coinquest.png")) {
+        cout << "Unable to Load";
+    }
+    sf::Sprite sprite(texture);
     RenderWindow Play;
     RenderWindow OPTIONS;
     RenderWindow EXIT;
     //Make Start Menu window and close it before game starts
     RenderWindow MENU(VideoMode(960, 720), "Start Menu", Style::Default);
-    StartMenu StartMenu(MENU.getSize().x, MENU.getSize().y);
+    
+    StartMenu StartMenu(960, 720);
 
     while (MENU.isOpen()) {
+        MENU.draw(sprite);
         Event event;
         while (MENU.pollEvent(event)) {
             if (event.type == Event::Closed) {
@@ -177,73 +186,5 @@ int main (void)
     MENU.clear();
     StartMenu.draw(MENU);
     MENU.display();
-   /* GLFWwindow* window;
-
-    /*initialize Library*/
-    //if (!glfwInit())
-       // return -1;
-
-    /*Create a winodwed mode window and its OpenGl context*/
-
-    /*window = glfwCreateWindow(640, 480, "Coinquest", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return - 1;
-    }
-
-    /* Make the Window's context current*/
-    //glfwMakeContextCurrent(window);
-
-    //if (glewInit() != GLEW_OK)
-        //std::cout << "Error!" << std::endl;
-    //get openGl version
-    //std::cout << glGetString(GL_VERSION) << std::endl;
-    
-  
-    //calculations for drawing to the screen
-    //int screenwidth = 640;
-    //int screenheight = 480;
-
-    //the size of a ground box used to calculate the coordiantes of the square
-   // int boxwidth = 50;
-    //int boxheight = 50;
-    //int boxleft = -1.07813 * screenwidth;
-    //int boxbottom = -1 * screenheight;
-
-    // calculate screen space coordinates
-    //we use coords to create the square
-    //float left = (float)boxleft / screenwidth;
-    //float right = left + (float)boxwidth / screenwidth;
-    //float bottom = (float)boxbottom / screenheight;
-    //float top = bottom + (float)boxheight / screenheight;
-    
-    //loop the squares to make the ground
-    //while (left < screenwidth) {
-       
-       // drawGround(left, right, top, bottom);
-        //left++;
-        
-    //}
-
-
-    /*Loop until the user closes the window*/
-    //while (!glfwWindowShouldClose(window))
-    //{
-        /*Render here*/
-       // glClearColor(0.5294f, 0.8078f, 0.9216f, 1.0f);
-       // glClear(GL_COLOR_BUFFER_BIT);
-
-        //glDrawArrays(GL_POLYGON, 0, 4);
-        
-        /*swap front and back buffers*/
-        //glfwSwapBuffers(window);
-
-        /*Poll for and process events*/
-        //glfwPollEvents();
-    //}
-
-    
-
-   // glDeleteProgram(shader);*/
+   
 }
